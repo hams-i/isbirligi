@@ -44,168 +44,283 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #d3c2eb;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .form-card:hover {
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ae00ff;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #8c74ab;
+            box-shadow: 0 0 0 3px rgba(140, 116, 171, 0.1);
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .section-title {
+            color: #2d3748;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        input[type="number"] {
+            border: 3px solid #8c74ab;
+        }
+
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #8c74ab;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #775c95;
+        }
+
+        .table-container {
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        th {
+            background-color: #f8fafc;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        td {
+            padding: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .quantity-input {
+            width: 5rem;
+            text-align: center;
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.375rem;
+        }
+
+        .summary-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        .summary-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+
+        .summary-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-label {
+            color: #4a5568;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
         }
     </style>
 </head>
 
-<body class="bg-black-purple-50 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
+<body class="min-h-screen bg-gradient-to-br from-black-purple-100/40 to-black-purple-200/40">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
         <div class="flex flex-col md:flex-row gap-8">
             <!-- Form Section -->
-            <div class="w-full md:w-1/2">
-                <form id="productRequestForm" class="space-y-6">
-                    <!-- Firma Temsilcisi Bilgileri Bölümü -->
-                    <div class="space-y-4">
-                        <h2 class="text-xl font-medium text-black-purple-700 flex items-center gap-2">
-                            <span class="material-icons-outlined">business</span>
+            <div class="w-full md:w-3/5">
+                <form id="productRequestForm" class="space-y-8">
+                    <!-- Firma Temsilcisi Bilgileri -->
+                    <div class="form-card p-6">
+                        <h2 class="section-title">
+                            <span class="material-icons-outlined text-black-purple-600">business</span>
                             Firma Temsilcisi Bilgileri
                         </h2>
-                        <div class="grid md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-black-purple-600 mb-1">Ad</label>
-                                <input type="text" name="repFirstName" id="repFirstName"
-                                    class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="input-group">
+                                <label class="form-label">Ad</label>
+                                <input type="text" name="repFirstName" id="repFirstName" class="form-input">
                             </div>
-                            <div>
-                                <label class="block text-sm font-medium text-black-purple-600 mb-1">Soyad</label>
-                                <input type="text" name="repLastName" id="repLastName"
-                                    class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                            <div class="input-group">
+                                <label class="form-label">Soyad</label>
+                                <input type="text" name="repLastName" id="repLastName" class="form-input">
                             </div>
-                            <div>
-                                <label class="block text-sm font-medium text-black-purple-600 mb-1">Ünvan</label>
-                                <input type="text" name="repTitle" id="repTitle"
-                                    class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                            <div class="input-group">
+                                <label class="form-label">Ünvan</label>
+                                <input type="text" name="repTitle" id="repTitle" class="form-input">
                             </div>
-                            <div>
-                                <label class="block text-sm font-medium text-black-purple-600 mb-1">Departman</label>
-                                <input type="text" name="repDepartment" id="repDepartment"
-                                    class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                            <div class="input-group">
+                                <label class="form-label">Departman</label>
+                                <input type="text" name="repDepartment" id="repDepartment" class="form-input">
                             </div>
-                            <div>
-                                <label class="block text-sm font-medium text-black-purple-600 mb-1">Telefon</label>
-                                <input type="tel" name="repPhone" id="repPhone"
-                                    class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500"
+                            <div class="input-group">
+                                <label class="form-label">Telefon</label>
+                                <input type="tel" name="repPhone" id="repPhone" class="form-input"
                                     placeholder="0555 123 4567">
                             </div>
-                            <div>
-                                <label class="block text-sm font-medium text-black-purple-600 mb-1">E-mail</label>
-                                <input type="email" name="repEmail" id="repEmail"
-                                    class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500"
+                            <div class="input-group">
+                                <label class="form-label">E-mail</label>
+                                <input type="email" name="repEmail" id="repEmail" class="form-input"
                                     placeholder="ornek@firma.com">
                             </div>
                         </div>
                     </div>
 
-                    <!-- İşbirliği Yapılacak Kişi Bilgileri Bölümü -->
-                    <div class="space-y-4">
-                        <h2 class="text-xl font-medium text-black-purple-700 flex items-center gap-2">
-                            <span class="material-icons-outlined">person</span>
+                    <!-- İşbirliği Yapılacak Kişi Bilgileri -->
+                    <div class="form-card p-6">
+                        <h2 class="section-title">
+                            <span class="material-icons-outlined text-black-purple-600">person</span>
                             İşbirliği Yapılacak Kişi Bilgileri
                         </h2>
-                        <div class="grid md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-black-purple-600 mb-1">Ad</label>
-                                <input type="text" name="firstName" id="firstName"
-                                    class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="input-group">
+                                <label class="form-label">Ad</label>
+                                <input type="text" name="firstName" id="firstName" class="form-input">
                             </div>
-                            <div>
-                                <label class="block text-sm font-medium text-black-purple-600 mb-1">Soyad</label>
-                                <input type="text" name="lastName" id="lastName"
-                                    class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                            <div class="input-group">
+                                <label class="form-label">Soyad</label>
+                                <input type="text" name="lastName" id="lastName" class="form-input">
                             </div>
-                            <div>
-                                <label class="block text-sm font-medium text-black-purple-600 mb-1">E-mail</label>
-                                <input type="email" name="email"
-                                    class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500"
-                                    placeholder="ornek@mail.com">
+                            <div class="input-group">
+                                <label class="form-label">E-mail</label>
+                                <input type="email" name="email" class="form-input" placeholder="ornek@mail.com">
                             </div>
-                            <div>
-                                <label class="block text-sm font-medium text-black-purple-600 mb-1">Telefon</label>
-                                <input type="tel" name="phone"
-                                    class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500"
-                                    placeholder="0555 123 4567">
+                            <div class="input-group">
+                                <label class="form-label">Telefon</label>
+                                <input type="tel" name="phone" class="form-input" placeholder="0555 123 4567">
                             </div>
                             <div class="md:col-span-2">
-                                <label class="block text-sm font-medium text-black-purple-600 mb-1">Adres</label>
-                                <textarea name="address" id="address" rows="2"
-                                    class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500"></textarea>
+                                <label class="form-label">Adres</label>
+                                <textarea name="address" id="address" rows="3" class="form-input"></textarea>
                             </div>
                         </div>
                     </div>
 
                     <!-- Ürünler Listesi -->
-                    <div class="space-y-4">
-                        <h2 class="text-xl font-medium text-black-purple-700 flex items-center gap-2">
-                            <span class="material-icons-outlined">inventory_2</span>
+                    <div class="form-card p-6">
+                        <h2 class="section-title">
+                            <span class="material-icons-outlined text-black-purple-600">inventory_2</span>
                             Ürünler
                         </h2>
-                        <div class="overflow-x-auto">
-                            <table class="w-full border-collapse">
+                        <div class="table-container">
+                            <table>
                                 <thead>
-                                    <tr class="bg-black-purple-50">
-                                        <th
-                                            class="py-2 px-4 text-left text-sm font-medium text-black-purple-700 border-b border-black-purple-200">
-                                            Ürün Adı</th>
-                                        <th
-                                            class="py-2 px-4 text-center text-sm font-medium text-black-purple-700 border-b border-black-purple-200 w-32">
-                                            Adet</th>
+                                    <tr>
+                                        <th>Ürün Adı</th>
+                                        <th class="text-center w-32">Adet</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="border-b border-black-purple-100">
-                                        <td class="py-3 px-4">Collagen Classic</td>
-                                        <td class="py-3 px-4">
+                                    <tr>
+                                        <td class="font-medium">Collagen Classic</td>
+                                        <td class="text-center">
                                             <input type="number" name="product_1_quantity" min="0" value="0"
-                                                class="w-full text-center px-2 py-1 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                                                class="quantity-input">
                                         </td>
                                     </tr>
-                                    <tr class="border-b border-black-purple-100">
-                                        <td class="py-3 px-4">Purple Collagen</td>
-                                        <td class="py-3 px-4">
+                                    <tr>
+                                        <td class="font-medium">Purple Collagen</td>
+                                        <td class="text-center">
                                             <input type="number" name="product_2_quantity" min="0" value="0"
-                                                class="w-full text-center px-2 py-1 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                                                class="quantity-input">
                                         </td>
                                     </tr>
-                                    <tr class="border-b border-black-purple-100">
-                                        <td class="py-3 px-4">5x Çoklu Magnezyum</td>
-                                        <td class="py-3 px-4">
+                                    <tr>
+                                        <td class="font-medium">5x Çoklu Magnezyum</td>
+                                        <td class="text-center">
                                             <input type="number" name="product_3_quantity" min="0" value="0"
-                                                class="w-full text-center px-2 py-1 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                                                class="quantity-input">
                                         </td>
                                     </tr>
-                                    <tr class="border-b border-black-purple-100">
-                                        <td class="py-3 px-4">Bromelain</td>
-                                        <td class="py-3 px-4">
+                                    <tr>
+                                        <td class="font-medium">Bromelain</td>
+                                        <td class="text-center">
                                             <input type="number" name="product_4_quantity" min="0" value="0"
-                                                class="w-full text-center px-2 py-1 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                                                class="quantity-input">
                                         </td>
                                     </tr>
-                                    <tr class="border-b border-black-purple-100">
-                                        <td class="py-3 px-4">Cranberry</td>
-                                        <td class="py-3 px-4">
+                                    <tr>
+                                        <td class="font-medium">Cranberry</td>
+                                        <td class="text-center">
                                             <input type="number" name="product_5_quantity" min="0" value="0"
-                                                class="w-full text-center px-2 py-1 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                                                class="quantity-input">
                                         </td>
                                     </tr>
-                                    <tr class="border-b border-black-purple-100">
-                                        <td class="py-3 px-4">Multivitamin</td>
-                                        <td class="py-3 px-4">
+                                    <tr>
+                                        <td class="font-medium">Multivitamin</td>
+                                        <td class="text-center">
                                             <input type="number" name="product_6_quantity" min="0" value="0"
-                                                class="w-full text-center px-2 py-1 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                                                class="quantity-input">
                                         </td>
                                     </tr>
-                                    <tr class="border-b border-black-purple-100">
-                                        <td class="py-3 px-4">Mind Focus</td>
-                                        <td class="py-3 px-4">
+                                    <tr>
+                                        <td class="font-medium">Mind Focus</td>
+                                        <td class="text-center">
                                             <input type="number" name="product_7_quantity" min="0" value="0"
-                                                class="w-full text-center px-2 py-1 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                                                class="quantity-input">
                                         </td>
                                     </tr>
-                                    <tr class="border-b border-black-purple-100">
-                                        <td class="py-3 px-4">Postbiyotik</td>
-                                        <td class="py-3 px-4">
+                                    <tr>
+                                        <td class="font-medium">Postbiyotik</td>
+                                        <td class="text-center">
                                             <input type="number" name="product_8_quantity" min="0" value="0"
-                                                class="w-full text-center px-2 py-1 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                                                class="quantity-input">
                                         </td>
                                     </tr>
                                 </tbody>
@@ -213,41 +328,34 @@
                         </div>
                     </div>
 
-                    <!-- Açıklama Bölümü -->
-                    <div class="space-y-4">
-                        <h2 class="text-xl font-medium text-black-purple-700 flex items-center gap-2">
-                            <span class="material-icons-outlined">description</span>
+                    <!-- Açıklama -->
+                    <div class="form-card p-6">
+                        <h2 class="section-title">
+                            <span class="material-icons-outlined text-black-purple-600">description</span>
                             Açıklama
                         </h2>
-                        <div>
-                            <textarea name="description" id="description" rows="4"
-                                class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500"
-                                placeholder="Ek açıklamalarınızı buraya yazabilirsiniz..."></textarea>
-                        </div>
+                        <textarea name="description" id="description" rows="4" class="form-input"
+                            placeholder="Ek açıklamalarınızı buraya yazabilirsiniz..."></textarea>
                     </div>
                 </form>
             </div>
 
-            <!-- Export Options -->
-            <div class="w-full md:w-1/2 flex flex-col gap-4">
-                <!-- Summary Panel -->
-                <div id="summaryPanel" class="bg-white p-6 rounded-lg shadow-md">
-                    <!-- Content will be dynamically populated by JavaScript -->
-                </div>
+            <!-- Summary Section -->
+            <div class="w-full md:w-2/5 space-y-6">
+                <div id="summaryPanel" class="summary-card"></div>
 
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold mb-4">Dışa Aktarma Seçenekleri</h2>
-                    <div class="flex flex-wrap gap-2">
-                        <button id="printBtn" type="button" class="btn btn-primary">
-                            <span class="material-icons-outlined">print</span> Yazdır
-                        </button>
-                    </div>
+                <div class="form-card p-6">
+                    <h2 class="section-title mb-4">Dışa Aktarma Seçenekleri</h2>
+                    <button id="printBtn" type="button" class="btn btn-primary w-full"
+                        style="display: flex; justify-content: center;">
+                        <span class="material-icons-outlined">print</span>
+                        Yazdır
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Ana JavaScript dosyasını dahil et -->
     <script src="js/main.js"></script>
     <script>
         // Bugünün tarihini otomatik olarak ayarla
@@ -324,24 +432,31 @@
             const summaryHTML = `
                 <h2 class="text-xl font-semibold mb-4">Form Özeti</h2>
                 <div class="space-y-4">
-                    <div>
+                    <div class="summary-section">
                         <h3 class="font-medium text-black-purple-600">Firma Temsilcisi</h3>
                         <p>${formData.get('repFirstName') || ''} ${formData.get('repLastName') || ''}</p>
                         <p>${formData.get('repTitle') || ''} - ${formData.get('repDepartment') || ''}</p>
+                        <p>${formData.get('repPhone') || ''}</p>
+                        <p>${formData.get('repEmail') || ''}</p>
                     </div>
-                    <div>
+                    <div class="summary-section">
                         <h3 class="font-medium text-black-purple-600">İşbirliği Yapılacak Kişi</h3>
                         <p>${formData.get('firstName') || ''} ${formData.get('lastName') || ''}</p>
                         <p>${formData.get('phone') || ''}</p>
+                        <p>${formData.get('email') || ''}</p>
                         <p>${formData.get('address') || ''}</p>
                     </div>
-                    <div>
+                    <div class="summary-section">
                         <h3 class="font-medium text-black-purple-600">Ürünler (${productCount} adet)</h3>
                         <ul class="list-disc pl-5">
                             ${productItems.map(item => `<li>${item}</li>`).join('')}
                         </ul>
                     </div>
-                    <div>
+                    <div class="summary-section">
+                        <h3 class="font-medium text-black-purple-600">Açıklama</h3>
+                        <p class="whitespace-pre-wrap">${formData.get('description') || 'Açıklama girilmedi'}</p>
+                    </div>
+                    <div class="summary-section">
                         <h3 class="font-medium text-black-purple-600">Tarih</h3>
                         <p>${formattedDate}</p>
                     </div>
@@ -397,7 +512,7 @@
                 return rows;
             }
 
-            
+
         }
     </script>
 </body>
