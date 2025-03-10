@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ürün Talep Formu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Flatpickr for better date picker -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/tr.js"></script>
+    <!-- ExcelJS for Excel export -->
+    <script src="https://cdn.jsdelivr.net/npm/exceljs@4.3.0/dist/exceljs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'black-purple': {
+                            50: '#f6f5f9',
+                            100: '#edebf3',
+                            200: '#dbd6e8',
+                            300: '#c2b8d6',
+                            400: '#a594c0',
+                            500: '#8c74ab',
+                            600: '#775c95',
+                            700: '#644b7a',
+                            800: '#503c62',
+                            900: '#2d2136',
+                            950: '#1a1220',
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-black-purple-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex flex-col md:flex-row gap-8">
+            <!-- Form Section -->
+            <div class="w-full md:w-1/2">
+                <form id="productRequestForm" class="space-y-6">
+                    <!-- Firma Temsilcisi Bilgileri Bölümü -->
+                    <div class="space-y-4">
+                        <h2 class="text-xl font-medium text-black-purple-700 flex items-center gap-2">
+                            <span class="material-icons-outlined">business</span>
+                            Firma Temsilcisi Bilgileri
+                        </h2>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-black-purple-600 mb-1">Ad</label>
+                                <input type="text" name="repFirstName" id="repFirstName"
+                                    class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-black-purple-600 mb-1">Soyad</label>
+                                <input type="text" name="repLastName" id="repLastName"
+                                    class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-black-purple-600 mb-1">Ünvan</label>
+                                <input type="text" name="repTitle" id="repTitle"
+                                    class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-black-purple-600 mb-1">Departman</label>
+                                <input type="text" name="repDepartment" id="repDepartment"
+                                    class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-black-purple-600 mb-1">Telefon</label>
+                                <input type="tel" name="repPhone" id="repPhone"
+                                    class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500"
+                                    placeholder="0555 123 4567">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-black-purple-600 mb-1">E-mail</label>
+                                <input type="email" name="repEmail" id="repEmail"
+                                    class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500"
+                                    placeholder="ornek@firma.com">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- İşbirliği Yapılacak Kişi Bilgileri Bölümü -->
+                    <div class="space-y-4">
+                        <h2 class="text-xl font-medium text-black-purple-700 flex items-center gap-2">
+                            <span class="material-icons-outlined">person</span>
+                            İşbirliği Yapılacak Kişi Bilgileri
+                        </h2>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-black-purple-600 mb-1">Ad</label>
+                                <input type="text" name="firstName" id="firstName"
+                                    class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-black-purple-600 mb-1">Soyad</label>
+                                <input type="text" name="lastName" id="lastName"
+                                    class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-black-purple-600 mb-1">E-mail</label>
+                                <input type="email" name="email"
+                                    class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500"
+                                    placeholder="ornek@mail.com">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-black-purple-600 mb-1">Telefon</label>
+                                <input type="tel" name="phone"
+                                    class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500"
+                                    placeholder="0555 123 4567">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-black-purple-600 mb-1">Adres</label>
+                                <textarea name="address" id="address" rows="2"
+                                    class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ürünler Listesi -->
+                    <div class="space-y-4">
+                        <h2 class="text-xl font-medium text-black-purple-700 flex items-center gap-2">
+                            <span class="material-icons-outlined">inventory_2</span>
+                            Ürünler
+                        </h2>
+                        <div class="overflow-x-auto">
+                            <table class="w-full border-collapse">
+                                <thead>
+                                    <tr class="bg-black-purple-50">
+                                        <th
+                                            class="py-2 px-4 text-left text-sm font-medium text-black-purple-700 border-b border-black-purple-200">
+                                            Ürün Adı</th>
+                                        <th
+                                            class="py-2 px-4 text-center text-sm font-medium text-black-purple-700 border-b border-black-purple-200 w-32">
+                                            Adet</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-black-purple-100">
+                                        <td class="py-3 px-4">Collagen Classic</td>
+                                        <td class="py-3 px-4">
+                                            <input type="number" name="product_1_quantity" min="0" value="0"
+                                                class="w-full text-center px-2 py-1 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-black-purple-100">
+                                        <td class="py-3 px-4">Purple Collagen</td>
+                                        <td class="py-3 px-4">
+                                            <input type="number" name="product_2_quantity" min="0" value="0"
+                                                class="w-full text-center px-2 py-1 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-black-purple-100">
+                                        <td class="py-3 px-4">5x Çoklu Magnezyum</td>
+                                        <td class="py-3 px-4">
+                                            <input type="number" name="product_3_quantity" min="0" value="0"
+                                                class="w-full text-center px-2 py-1 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-black-purple-100">
+                                        <td class="py-3 px-4">Bromelain</td>
+                                        <td class="py-3 px-4">
+                                            <input type="number" name="product_4_quantity" min="0" value="0"
+                                                class="w-full text-center px-2 py-1 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-black-purple-100">
+                                        <td class="py-3 px-4">Cranberry</td>
+                                        <td class="py-3 px-4">
+                                            <input type="number" name="product_5_quantity" min="0" value="0"
+                                                class="w-full text-center px-2 py-1 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-black-purple-100">
+                                        <td class="py-3 px-4">Multivitamin</td>
+                                        <td class="py-3 px-4">
+                                            <input type="number" name="product_6_quantity" min="0" value="0"
+                                                class="w-full text-center px-2 py-1 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-black-purple-100">
+                                        <td class="py-3 px-4">Mind Focus</td>
+                                        <td class="py-3 px-4">
+                                            <input type="number" name="product_7_quantity" min="0" value="0"
+                                                class="w-full text-center px-2 py-1 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-black-purple-100">
+                                        <td class="py-3 px-4">Postbiyotik</td>
+                                        <td class="py-3 px-4">
+                                            <input type="number" name="product_8_quantity" min="0" value="0"
+                                                class="w-full text-center px-2 py-1 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Açıklama Bölümü -->
+                    <div class="space-y-4">
+                        <h2 class="text-xl font-medium text-black-purple-700 flex items-center gap-2">
+                            <span class="material-icons-outlined">description</span>
+                            Açıklama
+                        </h2>
+                        <div>
+                            <textarea name="description" id="description" rows="4"
+                                class="w-full px-3 py-2 border border-black-purple-200 rounded-md focus:outline-none focus:ring-2 focus:ring-black-purple-500"
+                                placeholder="Ek açıklamalarınızı buraya yazabilirsiniz..."></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Export Options -->
+            <div class="w-full md:w-1/2 flex flex-col gap-4">
+                <!-- Summary Panel -->
+                <div id="summaryPanel" class="bg-white p-6 rounded-lg shadow-md">
+                    <!-- Content will be dynamically populated by JavaScript -->
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold mb-4">Dışa Aktarma Seçenekleri</h2>
+                    <div class="flex flex-wrap gap-2">
+                        <button id="printBtn" type="button" class="btn btn-primary">
+                            <span class="material-icons-outlined">print</span> Yazdır
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ana JavaScript dosyasını dahil et -->
+    <script src="js/main.js"></script>
+    <script>
+        // Bugünün tarihini otomatik olarak ayarla
+        document.addEventListener('DOMContentLoaded', function () {
+            const today = new Date();
+
+            // Firma temsilcisi bilgilerini LocalStorage'dan yükle
+            const repFirstName = localStorage.getItem('repFirstName');
+            const repLastName = localStorage.getItem('repLastName');
+            const repPhone = localStorage.getItem('repPhone');
+            const repEmail = localStorage.getItem('repEmail');
+            const repDepartment = localStorage.getItem('repDepartment');
+            const repTitle = localStorage.getItem('repTitle');
+
+            if (repFirstName) document.getElementById('repFirstName').value = repFirstName;
+            if (repLastName) document.getElementById('repLastName').value = repLastName;
+            if (repPhone) document.getElementById('repPhone').value = repPhone;
+            if (repEmail) document.getElementById('repEmail').value = repEmail;
+            if (repDepartment) document.getElementById('repDepartment').value = repDepartment;
+            if (repTitle) document.getElementById('repTitle').value = repTitle;
+
+            // Firma temsilcisi bilgilerini değiştiğinde kaydet
+            const repInputs = document.querySelectorAll('#repFirstName, #repLastName, #repPhone, #repEmail, #repDepartment, #repTitle');
+            repInputs.forEach(input => {
+                input.addEventListener('change', function () {
+                    localStorage.setItem(this.id, this.value);
+                });
+            });
+
+            // Form değişikliklerini dinleyelim ve özet panelini güncelleyelim
+            const form = document.getElementById('productRequestForm');
+            form.addEventListener('input', updateSummaryPanel);
+            updateSummaryPanel(); // İlk yükleme için özeti oluştur
+
+            // Yazdırma butonunu ayarla
+            document.getElementById('printBtn').addEventListener('click', printFormattedForm);
+        });
+
+        // Özet panelini güncelleme fonksiyonu
+        function updateSummaryPanel() {
+            const form = document.getElementById('productRequestForm');
+            const formData = new FormData(form);
+
+            let productCount = 0;
+            let productItems = [];
+
+            // Ürün sayılarını hesapla
+            for (let i = 1; i <= 8; i++) {
+                const quantity = parseInt(formData.get(`product_${i}_quantity`) || 0);
+                if (quantity > 0) {
+                    productCount += quantity;
+
+                    let productName = '';
+                    switch (i) {
+                        case 1: productName = 'Collagen Classic'; break;
+                        case 2: productName = 'Purple Collagen'; break;
+                        case 3: productName = '5x Çoklu Magnezyum'; break;
+                        case 4: productName = 'Bromelain'; break;
+                        case 5: productName = 'Cranberry'; break;
+                        case 6: productName = 'Multivitamin'; break;
+                        case 7: productName = 'Mind Focus'; break;
+                        case 8: productName = 'Postbiyotik'; break;
+                    }
+
+                    productItems.push(`${productName} (${quantity} adet)`);
+                }
+            }
+
+            // Tarih formatla
+            const today = new Date();
+            const formattedDate = `${today.getDate().toString().padStart(2, '0')}.${(today.getMonth() + 1).toString().padStart(2, '0')}.${today.getFullYear()}`;
+
+            // Özet HTML'i oluştur
+            const summaryHTML = `
+                <h2 class="text-xl font-semibold mb-4">Form Özeti</h2>
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="font-medium text-black-purple-600">Firma Temsilcisi</h3>
+                        <p>${formData.get('repFirstName') || ''} ${formData.get('repLastName') || ''}</p>
+                        <p>${formData.get('repTitle') || ''} - ${formData.get('repDepartment') || ''}</p>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-black-purple-600">İşbirliği Yapılacak Kişi</h3>
+                        <p>${formData.get('firstName') || ''} ${formData.get('lastName') || ''}</p>
+                        <p>${formData.get('phone') || ''}</p>
+                        <p>${formData.get('address') || ''}</p>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-black-purple-600">Ürünler (${productCount} adet)</h3>
+                        <ul class="list-disc pl-5">
+                            ${productItems.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-black-purple-600">Tarih</h3>
+                        <p>${formattedDate}</p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('summaryPanel').innerHTML = summaryHTML;
+        }
+
+        // Biçimlendirilmiş formu yazdır (urun-talep-formu.html formatında)
+        function printFormattedForm() {
+            const form = document.getElementById('productRequestForm');
+            const formData = new FormData(form);
+
+            // Ürün satırlarını oluştur
+            function generateProductRows(formData) {
+                const products = [
+                    { name: 'Collagen Classic', field: 'product_1_quantity' },
+                    { name: 'Purple Collagen', field: 'product_2_quantity' },
+                    { name: '5x Çoklu Magnezyum', field: 'product_3_quantity' },
+                    { name: 'Bromelain', field: 'product_4_quantity' },
+                    { name: 'Cranberry', field: 'product_5_quantity' },
+                    { name: 'Multivitamin', field: 'product_6_quantity' },
+                    { name: 'Mind Focus', field: 'product_7_quantity' },
+                    { name: 'Postbiyotik', field: 'product_8_quantity' }
+                ];
+
+                let rows = '';
+                let totalQuantity = 0;
+
+                products.forEach(product => {
+                    const quantity = parseInt(formData.get(product.field) || 0);
+                    if (quantity > 0) {
+                        rows += `
+                            <tr>
+                                <td>${product.name}</td>
+                                <td>${quantity}</td>
+                            </tr>
+                        `;
+                        totalQuantity += quantity;
+                    }
+                });
+
+                if (totalQuantity > 0) {
+                    rows += `
+                        <tr>
+                            <th>Toplam</th>
+                            <td>${totalQuantity}</td>
+                        </tr>
+                    `;
+                }
+
+                return rows;
+            }
+
+            
+        }
+    </script>
+</body>
+
+</html>

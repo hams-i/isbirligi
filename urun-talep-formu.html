@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ürün Talep Formu</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .form-container {
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            width: 980px;
+        }
+
+        td,
+        th {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            border: none;
+            background: transparent;
+            outline: none;
+        }
+
+        textarea {
+            resize: none;
+            height: 100%;
+        }
+
+        .header {
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        .logo-cell {
+            width: 175px;
+            height: 136px;
+        }
+
+        .title-cell {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .document-info td {
+            height: 34px;
+        }
+
+        .date-cell {
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .date-cell input {
+            text-align: center;
+        }
+
+        #logoPreview {
+            max-width: 160px;
+            max-height: 85px;
+            margin-top: 20px;
+        }
+
+        .no-print {
+            margin-bottom: 20px;
+        }
+
+        @media print {
+            .no-print {
+                display: none;
+            }
+
+            body {
+                padding: 0;
+            }
+
+            .form-container {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container">
+        <div class="no-print">
+            <h2>Ürün Talep Formu</h2>
+            <p>Formu doldurun ve yazdır, PDF olarak kaydet, paylaş veya Excel olarak kaydet seçeneklerinden birini
+                seçin.</p>
+        </div>
+
+        <div class="button-group no-print">
+            <button class="button" onclick="printForm()">Yazdır</button>
+            <button class="button" onclick="savePDF()">PDF Olarak Kaydet</button>
+            <button class="button" onclick="shareForm()"style="display: none;">Paylaş</button>
+            <button class="button" onclick="saveExcel()" style="display: none;">Excel Olarak Kaydet</button>
+        </div>
+
+        <form id="productRequestForm">
+            <table>
+                <tr height="34">
+                    <td rowspan="4" id="logoCell" class="logo-cell" style="width: 175px;"></td>
+                    <td colspan="6" rowspan="4" class="title-cell">ÜRÜN TALEP FORMU</td>
+                    <td>Doküman No</td>
+                    <td><input type="text" name="dokuman_no"></td>
+                </tr>
+                <tr height="34" class="document-info">
+                    <td>Yayın Tarihi</td>
+                    <td><input type="text" name="yayin_tarihi"></td>
+                </tr>
+                <tr height="34" class="document-info">
+                    <td>Revizyon No</td>
+                    <td><input type="text" name="revizyon_no"></td>
+                </tr>
+                <tr height="34" class="document-info">
+                    <td>Revize Tarihi</td>
+                    <td><input type="text" name="revize_tarihi"></td>
+                </tr>
+                <tr height="57">
+                    <td colspan="7" class="header">PERSONEL BİLGİSİ</td>
+                    <td colspan="2" class="header">TARİH</td>
+                </tr>
+                <tr height="37">
+                    <td>AD SOYAD</td>
+                    <td colspan="6"><input type="text" name="ad_soyad" value="Hande SELLİ"></td>
+                    <td colspan="2" rowspan="3" class="date-cell"><input type="text" name="tarih" value=""></td>
+                </tr>
+                <tr height="41">
+                    <td>DEPARTMAN</td>
+                    <td colspan="6"><input type="text" name="departman" value="Pazarlama"></td>
+                </tr>
+                <tr height="38">
+                    <td>ÜNVAN</td>
+                    <td colspan="6"><input type="text" name="unvan" value="Influencer Marketing"></td>
+                </tr>
+                <tr height="54">
+                    <td class="header">ÜRÜN İSMİ</td>
+                    <td class="header">ADET</td>
+                    <td class="header">TUTAR</td>
+                    <td colspan="6" class="header">ALICI VE KARGO BİLGİLERİ</td>
+                </tr>
+                <tr height="52">
+                    <td>Collagen Classic</td>
+                    <td><input type="text" name="adet_1" value=""></td>
+                    <td><input type="text" name="tutar_1"></td>
+                    <td>ALICI AD</td>
+                    <td colspan="5"><input type="text" name="alici_ad" value=""></td>
+                </tr>
+                <tr height="52">
+                    <td>Purple Collagen</td>
+                    <td><input type="text" name="adet_2" value=""></td>
+                    <td><input type="text" name="tutar_2"></td>
+                    <td>ALICI SOYAD</td>
+                    <td colspan="5"><input type="text" name="alici_soyad" value=""></td>
+                </tr>
+                <tr height="52">
+                    <td>5x Çoklu Magnezyum</td>
+                    <td><input type="text" name="adet_3"></td>
+                    <td><input type="text" name="tutar_3"></td>
+                    <td>ALICI TELEFON</td>
+                    <td colspan="5"><input type="text" name="alici_telefon" value=""></td>
+                </tr>
+                <tr height="52">
+                    <td>Bromelain</td>
+                    <td><input type="text" name="adet_4"></td>
+                    <td><input type="text" name="tutar_4"></td>
+                    <td>ALICI ADRES</td>
+                    <td colspan="5" rowspan="2"><textarea name="alici_adres"></textarea></td>
+                </tr>
+                <tr height="52">
+                    <td>Cranberry</td>
+                    <td><input type="text" name="adet_5"></td>
+                    <td><input type="text" name="tutar_5"></td>
+                    <td></td>
+                </tr>
+                <tr height="52">
+                    <td>Multivitamin</td>
+                    <td><input type="text" name="adet_6"></td>
+                    <td><input type="text" name="tutar_6"></td>
+                    <td colspan="6" class="header">TALEP AÇIKLAMASI</td>
+                </tr>
+                <tr height="52">
+                    <td>Mind Focus</td>
+                    <td><input type="text" name="adet_7"></td>
+                    <td><input type="text" name="tutar_7"></td>
+                    <td colspan="6" rowspan="5"><textarea name="talep_aciklamasi"></textarea></td>
+                </tr>
+                <tr height="52">
+                    <td>Postbiyotik</td>
+                    <td><input type="text" name="adet_8"></td>
+                    <td><input type="text" name="tutar_8"></td>
+                </tr>
+                <tr height="52">
+                    <td>Calm</td>
+                    <td><input type="text" name="adet_9"></td>
+                    <td><input type="text" name="tutar_9"></td>
+                </tr>
+                <tr height="52">
+                    <td>Omega3</td>
+                    <td><input type="text" name="adet_10"></td>
+                    <td><input type="text" name="tutar_10"></td>
+                </tr>
+                <tr height="52">
+                    <td>D3K2</td>
+                    <td><input type="text" name="adet_11"></td>
+                    <td><input type="text" name="tutar_11"></td>
+                </tr>
+                <tr height="52">
+                    <td class="header">TOPLAM</td>
+                    <td><input type="text" name="toplam_adet" value=""></td>
+                    <td><input type="text" name="toplam_tutar"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr height="52">
+                    <td colspan="9" class="header">KONTROL - ONAY</td>
+                </tr>
+                <tr height="52">
+                    <td colspan="4" class="header">PAZARLAMA</td>
+                    <td colspan="5" class="header">MALİ İŞLER</td>
+                </tr>
+                <tr height="122">
+                    <td colspan="4" rowspan="3"></td>
+                    <td colspan="5" rowspan="3"></td>
+                </tr>
+                <tr height="20"></tr>
+                <tr height="20"></tr>
+            </table>
+        </form>
+    </div>
+
+    <script>
+
+        // Add default logo on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            const logoCell = document.getElementById('logoCell');
+            const logoImg = document.createElement('img');
+            logoImg.src = 'assets/kiperin_logo.png';
+            logoImg.style.maxWidth = '100%';
+            logoCell.appendChild(logoImg);
+            
+            // Set current date
+            const today = new Date();
+            const formattedDate = today.toLocaleDateString('tr-TR');
+            document.querySelector('input[name="tarih"]').value = formattedDate;
+        });
+
+        // Print functionality
+        function printForm() {
+            window.print();
+        }
+
+        // Save as PDF
+        async function savePDF() {
+            const { jsPDF } = window.jspdf;
+
+            // First convert the form to an image using html2canvas
+            const formElement = document.getElementById('productRequestForm');
+            const canvas = await html2canvas(formElement, {
+                scale: 2,
+                useCORS: true,
+                logging: false
+            });
+
+            // Create new PDF document
+            const doc = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4'
+            });
+
+            // Add the image to the PDF
+            const imgData = canvas.toDataURL('image/jpeg', 1.0);
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const pageHeight = doc.internal.pageSize.getHeight();
+            const ratio = canvas.width / canvas.height;
+            let imgWidth = pageWidth;
+            let imgHeight = imgWidth / ratio;
+
+            // Adjust if image is taller than the page
+            if (imgHeight > pageHeight) {
+                imgHeight = pageHeight;
+                imgWidth = imgHeight * ratio;
+            }
+
+            // Position the image in the center of the page
+            const x = (pageWidth - imgWidth) / 2;
+            const y = 0;
+
+            doc.addImage(imgData, 'JPEG', x, y, imgWidth, imgHeight);
+            doc.save('urun-talep-formu.pdf');
+        }
+
+        // Share functionality
+        function shareForm() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Ürün Talep Formu',
+                    text: 'Ürün Talep Formu'
+                })
+                    .catch((error) => console.log('Paylaşım sırasında hata oluştu:', error));
+            } else {
+                alert('Tarayıcınız paylaşım özelliğini desteklemiyor.');
+            }
+        }
+
+        // Save as Excel
+        function saveExcel() {
+            const form = document.getElementById('productRequestForm');
+            const formData = new FormData(form);
+
+            // Create worksheet data
+            const wsData = [
+                ['ÜRÜN TALEP FORMU'],
+                ['Doküman No', formData.get('dokuman_no')],
+                ['Yayın Tarihi', formData.get('yayin_tarihi')],
+                ['Revizyon No', formData.get('revizyon_no')],
+                ['Revize Tarihi', formData.get('revize_tarihi')],
+                [''],
+                ['PERSONEL BİLGİSİ', '', '', '', '', '', '', 'TARİH'],
+                ['AD SOYAD', formData.get('ad_soyad'), '', '', '', '', '', formData.get('tarih')],
+                ['DEPARTMAN', formData.get('departman')],
+                ['ÜNVAN', formData.get('unvan')],
+                [''],
+                ['ÜRÜN İSMİ', 'ADET', 'TUTAR', '', 'ALICI VE KARGO BİLGİLERİ'],
+                ['Collagen Classic', formData.get('adet_1'), formData.get('tutar_1'), 'ALICI AD', formData.get('alici_ad')],
+                ['Purple Collagen', formData.get('adet_2'), formData.get('tutar_2'), 'ALICI SOYAD', formData.get('alici_soyad')],
+                ['5x Çoklu Magnezyum', formData.get('adet_3'), formData.get('tutar_3'), 'ALICI TELEFON', formData.get('alici_telefon')],
+                ['Bromelain', formData.get('adet_4'), formData.get('tutar_4'), 'ALICI ADRES', formData.get('alici_adres')],
+                ['Cranberry', formData.get('adet_5'), formData.get('tutar_5')],
+                ['Multivitamin', formData.get('adet_6'), formData.get('tutar_6'), '', 'TALEP AÇIKLAMASI'],
+                ['Mind Focus', formData.get('adet_7'), formData.get('tutar_7'), '', formData.get('talep_aciklamasi')],
+                ['Postbiyotik', formData.get('adet_8'), formData.get('tutar_8')],
+                ['Calm', formData.get('adet_9'), formData.get('tutar_9')],
+                ['Omega3', formData.get('adet_10'), formData.get('tutar_10')],
+                ['D3K2', formData.get('adet_11'), formData.get('tutar_11')],
+                ['TOPLAM', formData.get('toplam_adet'), formData.get('toplam_tutar')],
+                [''],
+                ['KONTROL - ONAY'],
+                ['PAZARLAMA', '', '', '', 'MALİ İŞLER']
+            ];
+
+            // Create a workbook
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+            // Add worksheet to workbook
+            XLSX.utils.book_append_sheet(wb, ws, 'Ürün Talep Formu');
+
+            // Save file
+            XLSX.writeFile(wb, 'urun-talep-formu.xlsx');
+        }
+
+        // Automatically calculate total
+        document.getElementById('productRequestForm').addEventListener('input', function (e) {
+            if (e.target.name && e.target.name.startsWith('adet_')) {
+                let totalAmount = 0;
+                for (let i = 1; i <= 11; i++) {
+                    const adet = document.querySelector(`input[name="adet_${i}"]`).value;
+                    if (adet && !isNaN(adet)) {
+                        totalAmount += parseInt(adet);
+                    }
+                }
+                document.querySelector('input[name="toplam_adet"]').value = totalAmount;
+            }
+
+            if (e.target.name && e.target.name.startsWith('tutar_')) {
+                let totalPrice = 0;
+                for (let i = 1; i <= 11; i++) {
+                    const tutar = document.querySelector(`input[name="tutar_${i}"]`).value;
+                    if (tutar && !isNaN(tutar)) {
+                        totalPrice += parseFloat(tutar);
+                    }
+                }
+                document.querySelector('input[name="toplam_tutar"]').value = totalPrice.toFixed(2);
+            }
+        });
+    </script>
+</body>
+
+</html>
